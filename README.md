@@ -68,8 +68,8 @@ docker-compose up --build
 
 Perintah ini akan:
 
-Membuild image Docker untuk layanan aplikasi.
-Menjalankan container untuk layanan aplikasi dan database PostgreSQL.
+1. Membuild image Docker untuk layanan aplikasi.
+2. Menjalankan container untuk layanan aplikasi dan database PostgreSQL.
 
 ### Langkah 4: Menjalankan dengan Flag untuk Mengatur Host dan Port
 
