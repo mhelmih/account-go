@@ -185,8 +185,8 @@ func (c *Client) CheckBalance(ctx echo.Context) error {
 	noRekening := ctx.Param("no_rekening")
 	saldoNasabah := models.Saldo{}
 
-	err := c.Db.First(&saldoNasabah, "no_rekening = ?", noRekening)
-	if err != nil {
+	result := c.Db.First(&saldoNasabah, "no_rekening = ?", noRekening)
+	if result.Error != nil {
 		c.Logger.Warn(fmt.Sprintf("failed to find nasabah with no_rekening=%s (not found)", noRekening))
 		return ctx.JSON(http.StatusBadRequest, map[string]interface{}{"remark": fmt.Sprintf("failed to find nasabah with no_rekening=%s (not found)", noRekening)})
 	}

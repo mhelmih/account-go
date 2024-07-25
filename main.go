@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -18,13 +19,23 @@ import (
 )
 
 func main() {
+	host := flag.String("host", "0.0.0.0", "Service host")
+	port := flag.String("port", "1323", "Service port")
+	flag.Parse()
+
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatalf("error loading .env file, %v", err)
 	}
 
+	dbHost := os.Getenv("DB_HOST")
+	if dbHost == "" {
+		dbHost = "localhost"
+	}
+
 	db, err := gorm.Open(postgres.Open(fmt.Sprintf(
-		"host=localhost user=%s password=%s dbname=%s port=5432 sslmode=disable",
+		"host=%s user=%s password=%s dbname=%s port=5432 sslmode=disable",
+		dbHost,
 		os.Getenv("POSTGRES_USER"),
 		os.Getenv("POSTGRES_PASSWORD"),
 		os.Getenv("POSTGRES_DB"),
@@ -46,5 +57,5 @@ func main() {
 
 	routes.RegisterRoutes(e, client)
 
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(fmt.Sprintf("%s:%s", *host, *port)))
 }
